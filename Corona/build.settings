@@ -1,0 +1,35 @@
+--
+-- The demo declares the plugin; Solar2D takes it from ~/Solar2DPlugins (funbox's install puts it there).
+-- No CFBundleIdentifier: CoronaBuilder takes the bundle id from the provisioning profile.
+-- Background Assets with Apple hosting: Studycat's app group and team (the TestFlight demo under
+-- net.studycat.funlanguages); use your own. Without the team identifier, app-requested downloads never start.
+--
+
+settings =
+{
+	plugins =
+	{
+		["plugin.backgroundAssets"] = { publisherId = "com.studycat" },
+	},
+
+	iphone =
+	{
+		xcassets = "Images.xcassets",
+		plist =
+		{
+			UILaunchStoryboardName = "LaunchScreen",
+			MinimumOSVersion = "26.0",
+			CFBundleDisplayName = "BA Demo",
+			CFBundleShortVersionString = "1.0.0",
+			CFBundleVersion = "1",
+			BAAppGroupID = "group.net.studycat.funlanguages",
+			BAHasManagedAssetPacks = true,
+			BAUsesAppleHosting = true,
+		},
+		entitlements =
+		{
+			["com.apple.security.application-groups"] = { "group.net.studycat.funlanguages" },
+			["com.apple.developer.team-identifier"] = "SEY52S4BJ9",
+		},
+	},
+}

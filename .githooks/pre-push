@@ -1,0 +1,14 @@
+#!/bin/bash
+# Runs the default test run before every push once tests/setup.sh has set core.hooksPath; a failure blocks the push and
+# keeps the run's output, whose path it prints. Deliberately no post-checkout hook: funbox runs `git checkout -f <rev>`
+# in plugin repos.
+set -uo pipefail
+
+root=$(git rev-parse --show-toplevel) || exit 1
+out=$(mktemp -d "${TMPDIR:-/tmp}/ba-prepush.XXXXXX") || exit 1
+if BA_TEST_OUT=$out /bin/bash "$root/tests/run.sh" </dev/null; then
+  rm -rf "$out"
+  exit 0
+fi
+echo "pre-push: test run failed; output kept in $out" >&2
+exit 1

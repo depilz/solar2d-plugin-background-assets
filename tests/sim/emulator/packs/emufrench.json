@@ -1,0 +1,15 @@
+{
+	"assetPackID": "emufrench",
+	"downloadPolicy": {
+		"onDemand": {}
+	},
+	"fileSelectors": [
+		{
+			"file": "emufrench/text.txt"
+		}
+	],
+	"language": "fr",
+	"platforms": [
+		"iOS"
+	]
+}

@@ -1,0 +1,14 @@
+{
+	"assetPackID": "emuprefetch",
+	"downloadPolicy": {
+		"prefetch": {}
+	},
+	"fileSelectors": [
+		{
+			"file": "emuprefetch/text.txt"
+		}
+	],
+	"platforms": [
+		"iOS"
+	]
+}

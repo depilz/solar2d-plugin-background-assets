@@ -1,0 +1,14 @@
+{
+	"assetPackID": "emuessential",
+	"downloadPolicy": {
+		"essential": {}
+	},
+	"fileSelectors": [
+		{
+			"file": "emuessential/text.txt"
+		}
+	],
+	"platforms": [
+		"iOS"
+	]
+}

@@ -1,0 +1,12 @@
+--
+-- The Simulator test project of plugin.backgroundAssets' folder emulator. Solar2D takes the plugin from
+-- ~/Solar2DPlugins; it runs in the Simulator only.
+--
+
+settings =
+{
+	plugins =
+	{
+		["plugin.backgroundAssets"] = { publisherId = "com.studycat" },
+	},
+}

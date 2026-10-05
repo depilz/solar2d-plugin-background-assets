@@ -1,0 +1,25 @@
+{
+	"assetPackID": "demoprefetch",
+	"downloadPolicy": {
+		"prefetch": {
+			"installationEventTypes": [
+				"firstInstallation",
+				"subsequentUpdate"
+			]
+		}
+	},
+	"fileSelectors": [
+		{
+			"file": "demoprefetch/image.png"
+		},
+		{
+			"file": "demoprefetch/sound.wav"
+		},
+		{
+			"file": "demoprefetch/text.txt"
+		}
+	],
+	"platforms": [
+		"iOS"
+	]
+}

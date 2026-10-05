@@ -1,0 +1,11 @@
+#!/bin/bash
+# emulator: the Simulator's folder emulator (lua/plugin_backgroundAssets_emulator.lua) under Solar2D's Lua 5.1, with
+# the front required over the shipped backend file and Solar2D's globals stood in. One row per case in cases.lua.
+set -euo pipefail
+W="$(cd "$(dirname "$0")" && pwd)"
+source "$W/../lib.sh"
+
+ids=$(lua51 "$W/cases.lua" "$BA_REPO" --list)
+while IFS= read -r id; do
+  run_test "$id" lua51 "$W/cases.lua" "$BA_REPO" "$id"
+done <<<"$ids"

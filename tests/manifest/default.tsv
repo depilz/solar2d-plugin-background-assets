@@ -1,0 +1,165 @@
+suite	test
+stub	archive iphone
+stub	archive mac-sim
+stub	archive win32-sim
+stub	pack.sh deterministic
+native	exports luaopen_plugin_backgroundAssets
+native	embeds the Lua front
+native	LC_BUILD_VERSION minos 13.0
+native	Background Assets symbols weak
+native	no BASuccessesErrorKey or BAFailuresErrorKey
+front	loads by require over the backend module; the smallest backend makes every call unsupported
+front	loads as a chunk called with a backend table
+front	gating at 25.0
+front	gating at 26.0
+front	gating at 26.3
+front	gating at 26.4
+front	gating at 27.0
+front	gating compares versions part by part
+front	unsupported: nil and the error from sync calls, async errors on a later turn
+front	async: a backend answering at once still dispatches on a later turn
+front	async: a backend answering later dispatches on its answer
+front	async: table listeners and calls without a listener
+front	arguments: a wrong type raises with its position
+front	arguments: assetPackId with language is invalidArgument
+front	shapes: packs keep their fields and sort by id
+front	shapes: status is a table of booleans
+front	shapes: manifest fields, localized packs by id then language, languages in order
+front	manifest methods
+front	shapes: checkForUpdates sorts its ids, languages keep the backend's order
+front	shapes: download events by phase
+front	errors: names by domain and code, other errors keep domain and code
+front	errors: a multi-pack failure carries sorted successes and failures
+front	requireLatestVersion: unsupported below 26.4, passed on from 26.4
+front	requireLatestVersions: passed on at 27.0
+front	D11: the file check gives fileNotFound for every path call
+front	D11: the pack check asks the backend from 26.4
+front	D11: the removed-pack record decides the pack check below 26.4
+front	D11: a finished download clears the record with no app delegate
+front	D11: the removed-pack record persists through the backend
+front	D11: a successful remove unlinks the pack
+front	pathForFile returns the backend link's filename and base directory
+front	path calls: options.language needs 27.0 and reaches the backend
+front	contentsAtPath and fileForPath pass the pack id and return the backend's answer
+front	assetPackIsAvailableLocally and the resolved language reach the backend
+emulator	the module: configure merges fields and returns nothing
+emulator	the module: configure raises a Lua error naming a wrong field
+emulator	the module: apiVersion and hosting are fixed once the front has loaded
+emulator	the module: the front's library table gains nothing
+emulator	win32-sim: detected from package.config, the emulator runs there
+emulator	pack sources: every selector kind, sourceRoot, and packs without it
+emulator	pack sources: only top-level .json manifests for iOS
+emulator	pack sources: a bad manifest is skipped with one printed line
+emulator	pack sources: re-read by every store call; packsDirectory relative or absolute
+emulator	raw packs: id, downloadSize, version 1, language and userInfo as JSON
+emulator	install-time: essential packs arrive at the first launch without events, once
+emulator	status: store and local status bits, unknown ids
+emulator	checkForUpdates: removes local packs whose manifest is gone
+emulator	removeAssetPack: deletes a local pack's files and folders
+emulator	path calls: urlForPath, pathForFile, contentsAtPath and fileForPath through the front
+emulator	languages: localized packs, getManifest and the language calls
+emulator	reset: empties the device; install-time packs come back at the next launch
+emulator	relaunch: the device and the removed-pack record persist
+emulator	downloads: timing, began, progress about every 100 ms, finished, then the call's listener
+emulator	downloads: the downloading bit, and a call joining the download in flight
+emulator	multi-pack: side by side; the first failure's error with successes and failures
+emulator	install-time: prefetch packs download at the first launch with events, and resume at a later load
+emulator	offline: store calls and downloads fail, local calls work, and the error override
+emulator	offline mid-flight: the download fails on the next tick and leaves no files
+emulator	low disk space: at start, mid-flight, free-space accounting and the error override
+emulator	removeAssetPack: a download in flight ends cancelled (3072), then the pack is removed
+emulator	removeAssetPack from the delegate's began: the download ends cancelled (3072) with one listener event
+emulator	removed-pack record at 26.0: a removed pack is unavailable until a download brings it back
+emulator	reset: downloads in flight end cancelled before the device is emptied
+emulator	reset from the delegate's progress: the download ends cancelled (3072) with one listener event, the device empty
+emulator	gating: the emulator through the front at 26.0, 26.4 and 27.0
+sim	sim require ok
+sim	sim capabilities: the emulator on mac-sim
+sim	sim every call logs a result, none unsupported
+sim	sim demoprefetch downloads at the first launch, with events
+sim	sim demoondemand downloads on ensureLocalAvailability, with events
+sim	sim pathForFile: display.newImage and audio.loadSound load the packs' files
+sim	sim after remove: assetPackNotAvailable with the pack id, fileNotFound without
+sim	sim flow runs to its done line, no runtime error
+sim	sim fetched from Solar2DPlugins
+sim	sim emulator: getCapabilities: supported on the platform package.config gives
+sim	sim emulator: the essential pack is local at the first launch, with no events
+sim	sim emulator: the prefetch pack downloads at the first launch: began, progress, finished
+sim	sim emulator: getAllAssetPacks and getManifest list the packs
+sim	sim emulator: getAssetPack gives the pack at version 1 with its size
+sim	sim emulator: status calls: downloadAvailable before a download, downloading during it
+sim	sim emulator: offline: store calls and a download fail with -1009, failed and no began; local calls work
+sim	sim emulator: offline mid-flight: began, progress, then failed with -1009, no file left
+sim	sim emulator: low disk space: a download fails at start with 640, failed and no began
+sim	sim emulator: ensureLocalAvailability downloads: began, progress to the pack's size, finished, then the listener
+sim	sim emulator: path calls read the pack's file: urlForPath, pathForFile, contentsAtPath, fileForPath
+sim	sim emulator: ensureLocalAvailabilityOfAssetPacks of local packs, and checkForUpdates
+sim	sim emulator: language calls: resolved language, a localized pack, its language local
+sim	sim emulator: removeAssetPack: the files go, path calls give assetPackNotAvailable
+sim	sim emulator: reset: an in-flight download fails with 3072, the device is emptied
+sim	sim emulator project runs every case to its done line, no runtime error
+sim	sim user dirs unchanged
+docs	docs build: exit 0, no warning
+docs	docs coverage: every public function, emulator option, error name and download phase has a reference entry
+extension	build.sh bash 3.2 syntax
+extension	build.sh --help
+extension	build.sh no arguments: exit 2
+extension	build.sh missing profile: exit 2
+extension	build.sh project without build.settings: exit 2
+extension	build.sh work inside checkout: exit 2
+extension	build.sh project inside checkout: exit 2
+extension	build.sh flag given as a value: exit 2
+extension	Info.plist extension point and display name
+extension	Swift source has both flavours, no [S1]
+extension	ios-build.sh bash 3.2 syntax
+extension	ios-build.sh self without --manifest-url: exit 2
+extension	ios-build.sh --manifest-url with apple: exit 2
+extension	ios-build.sh refused before --out is made: no --out left
+extension	ios-build.sh refused after --out is made: --out as found
+extension	Corona/build.settings carries C-3 (Lua 5.1)
+extension	packs.sh bash 3.2 syntax
+extension	packs.sh --out inside checkout: exit 2
+extension	packs.sh http base URL: exit 2
+extension	demo packs: ids without underscore, onDemand and prefetch, PNG, WAV and text each
+extension-sign	development apple built, stale appex replaced
+extension-sign	development apple codesign verify --deep --strict
+extension-sign	development apple entitlements
+extension-sign	development apple flavour links StoreKit only for apple
+extension-sign	development self built, stale appex replaced
+extension-sign	development self codesign verify --deep --strict
+extension-sign	development self entitlements
+extension-sign	development self flavour links StoreKit only for apple
+extension-sign	app-store apple built, stale appex replaced
+extension-sign	app-store apple codesign verify --deep --strict
+extension-sign	app-store apple entitlements
+extension-sign	app-store apple flavour links StoreKit only for apple
+extension-sign	app-store self built, stale appex replaced
+extension-sign	app-store self codesign verify --deep --strict
+extension-sign	app-store self entitlements
+extension-sign	app-store self flavour links StoreKit only for apple
+extension-sign	display name: built with --display-name
+extension-sign	display name: appex CFBundleDisplayName is the --display-name
+extension-sign	identity: built with the SHA-1 of the Development profile's identity
+extension-sign	identity: codesign verify --deep --strict
+extension-sign	identity: signed by that identity
+extension-sign	malformed identity exits 2 and writes nothing
+extension-sign	checkout unchanged
+native-harness	builds PluginBackgroundAssets.m as a macOS bundle
+native-harness	file handle: the wrapped fd reads and lines() works
+native-harness	file handle: close() gives io.type closed file
+native-harness	file handle: GC of an unclosed handle is safe
+native-harness	file handle: a bad fd gives nil and NSPOSIXErrorDomain 9, the stack unchanged
+native-harness	file handle: io = nil gives the unsupported error
+native-harness	513 policy: 513 twice then ok gives 3 lookups
+native-harness	513 policy: 513 always gives 1+4 lookups, then giving up
+native-harness	513 policy: a non-513 error gives 1 lookup
+native-harness	513 policy: slow 513s stop at the 50 ms budget
+native-harness	513 policy: a remove in flight is waited for
+native-harness	513 policy: a remove in flight is waited for at most 250 ms
+native-harness	links: the link name is <Caches>/plugin.backgroundAssets/<root's last component>
+native-harness	links: idempotent
+native-harness	links: recreated after the caches folder is deleted
+native-harness	links: retargeted when the root moves
+native-harness	links: a language root gets its own link
+native-harness	links: a file without the /path suffix gives nil and plugin error 2
+native-harness	record: the removed-pack record loads and saves

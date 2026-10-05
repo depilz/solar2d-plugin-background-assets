@@ -1,0 +1,20 @@
+{
+	"assetPackID": "demoondemand",
+	"downloadPolicy": {
+		"onDemand": {}
+	},
+	"fileSelectors": [
+		{
+			"file": "demoondemand/image.png"
+		},
+		{
+			"file": "demoondemand/sound.wav"
+		},
+		{
+			"file": "demoondemand/text.txt"
+		}
+	],
+	"platforms": [
+		"iOS"
+	]
+}

@@ -1,0 +1,14 @@
+{
+	"assetPackID": "emuondemand",
+	"downloadPolicy": {
+		"onDemand": {}
+	},
+	"fileSelectors": [
+		{
+			"file": "emuondemand/text.txt"
+		}
+	],
+	"platforms": [
+		"iOS"
+	]
+}

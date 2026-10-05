@@ -1,0 +1,17 @@
+# macOS
+.DS_Store
+._*
+
+# Xcode
+xcuserdata/
+*.xcuserstate
+DerivedData/
+ios/build/
+
+# Docs
+docs/_build/
+
+# Python
+.venv/
+venv/
+__pycache__/
