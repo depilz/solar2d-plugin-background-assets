@@ -1,7 +1,13 @@
 # Changelog
 
-## Unreleased
+## 1.0.1 — 2026-10-06
 
+- **`urlForPath` in the Windows Simulator.** On win32-sim `urlForPath` now returns a path with `/` separators only;
+  it used to join the Simulator's caches folder and the file's name with `\`. `pathForFile`, `contentsAtPath` and
+  `fileForPath` work as before, and the paths on macOS do not change.
+- **Troubleshooting for the Simulator's plist warnings.** The Troubleshooting page says the Simulator's
+  `unrecognized key: settings.iphone.plist.BA…` warnings for the Background Assets keys in `build.settings` are
+  expected and harmless.
 - **Docs refresh.** The docs move to the Furo theme, with a logo, copy buttons on code blocks, cards on the home page,
   a "How it works" diagram and link previews. The Lua API reference has a page per call, each with its syntax,
   parameters, result and an example, and separate pages for the tables, events, errors and the path calls' shared

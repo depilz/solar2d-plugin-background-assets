@@ -24,6 +24,7 @@ local FILES = ROOT .. "/files"
 local STAGING = ROOT .. "/staging"
 local STATE_FILE = ROOT .. "/state.json"
 local UNLOCALIZED = "Unlocalized"
+local IS_WINDOWS = package.config:sub( 1, 1 ) == "\\"
 
 local COPY_CHUNK = 1048576
 local PROGRESS_INTERVAL = 100
@@ -76,8 +77,11 @@ end
 
 -- Files and folders
 
+-- absolute: the path of a device name, with "/" only. Solar2D on Windows joins the folder and the name with "\".
+-- urlForPath returns this path and link() finds the name by the same string.
 local function absolute( name )
-	return system.pathForFile( name, system.CachesDirectory )
+	local path = system.pathForFile( name, system.CachesDirectory )
+	return IS_WINDOWS and path:gsub( "\\", "/" ) or path
 end
 
 local function parent( path )
@@ -615,8 +619,7 @@ local backend = {}
 function backend.info()
 	frontLoaded = true
 	installAtLaunch()
-	local isWindows = package.config:sub( 1, 1 ) == "\\"
-	return { platform = isWindows and "win32-sim" or "mac-sim", apiVersion = settings.apiVersion, hosting = settings.hosting }
+	return { platform = IS_WINDOWS and "win32-sim" or "mac-sim", apiVersion = settings.apiVersion, hosting = settings.hosting }
 end
 
 function backend.defer( fn )

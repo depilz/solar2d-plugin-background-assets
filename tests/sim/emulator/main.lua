@@ -235,6 +235,7 @@ case( "path calls read the pack's file: urlForPath, pathForFile, contentsAtPath,
 	local path, options = "emuondemand/text.txt", { assetPackId = "emuondemand" }
 	local file, err = lib.urlForPath( path, options )
 	check( file, "urlForPath: " .. tostring( err and err.message ) )
+	check( not file:find( "\\", 1, true ), "urlForPath has a backslash: " .. file )
 	local filename, baseDirectory = lib.pathForFile( path, options )
 	checkEqual( filename, DEVICE .. "/files/Unlocalized/" .. path, "pathForFile filename" )
 	checkEqual( baseDirectory, system.CachesDirectory, "pathForFile baseDirectory" )

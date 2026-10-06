@@ -41,15 +41,15 @@ Installing
                      publisherId = "com.studycat",
                      supportedPlatforms =
                      {
-                         iphone = { url = "https://github.com/depilz/solar2d-plugin-background-assets/releases/download/1.0.0/plugin.backgroundAssets-1.0.0-iphone.tgz" },
-                         ["mac-sim"] = { url = "https://github.com/depilz/solar2d-plugin-background-assets/releases/download/1.0.0/plugin.backgroundAssets-1.0.0-mac-sim.tgz" },
-                         ["win32-sim"] = { url = "https://github.com/depilz/solar2d-plugin-background-assets/releases/download/1.0.0/plugin.backgroundAssets-1.0.0-win32-sim.tgz" },
+                         iphone = { url = "https://github.com/depilz/solar2d-plugin-background-assets/releases/download/1.0.1/plugin.backgroundAssets-1.0.1-iphone.tgz" },
+                         ["mac-sim"] = { url = "https://github.com/depilz/solar2d-plugin-background-assets/releases/download/1.0.1/plugin.backgroundAssets-1.0.1-mac-sim.tgz" },
+                         ["win32-sim"] = { url = "https://github.com/depilz/solar2d-plugin-background-assets/releases/download/1.0.1/plugin.backgroundAssets-1.0.1-win32-sim.tgz" },
                      },
                  },
              },
          }
 
-      These URLs pin version 1.0.0. To move to a later release, change the version in all three.
+      These URLs pin version 1.0.1. To move to a later release, change the version in all three.
 
    .. tab-item:: Local copy
 

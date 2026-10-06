@@ -97,3 +97,7 @@ No pack exists
 An error differs from the one on a device
    The emulator assumes some behaviours that have never been observed on a device; :doc:`emulator` lists them under
    "Limits". Test on a device before you rely on an error code.
+
+The Simulator warns ``unrecognized key: settings.iphone.plist.BA…``
+   The warnings for ``BAUsesAppleHosting``, ``BAHasManagedAssetPacks`` and ``BAAppGroupID`` in ``build.settings`` are
+   expected and harmless, and the keys still reach the iOS build (see :doc:`setup`).

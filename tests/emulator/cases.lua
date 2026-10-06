@@ -609,6 +609,31 @@ local cases = {
 		end
 	end },
 
+	{ "win32-sim path calls: urlForPath gives forward slashes only, and the path calls and removeAssetPack work", function()
+		local world = newWorld()
+		package.config = "\\" .. package.config:sub( 2 )
+		-- Solar2D on Windows joins the base folder and the name with a backslash
+		local joinWithSlash = system.pathForFile
+		system.pathForFile = function( name, base )
+			return joinWithSlash( "", base ):gsub( "/$", "\\" ) .. name
+		end
+		filePack( world, "pack", "onDemand", { "image.png" } )
+		local lib = loadFront( launch() )
+		check( not download( world, lib, "pack" ).isError, "download" )
+		local name = UNLOCALIZED .. "/pack/image.png"
+		local file, err = lib.urlForPath( "pack/image.png" )
+		check( file, "urlForPath: " .. show( err ) )
+		check( not file:find( "\\", 1, true ), "urlForPath has a backslash: " .. show( file ) )
+		check( file == world.caches .. "/" .. name, "urlForPath " .. show( file ) )
+		checkSame( { lib.pathForFile( "pack/image.png" ) }, { name, "CachesDirectory" }, "pathForFile" )
+		check( lib.contentsAtPath( "pack/image.png" ) == "pack image.png", "contentsAtPath" )
+		local handle = lib.fileForPath( "pack/image.png" )
+		check( io.type( handle ) == "file" and handle:read( "*a" ) == "pack image.png", "fileForPath" )
+		handle:close()
+		check( not call( world, lib.removeAssetPack, "pack" ).isError, "removeAssetPack" )
+		check( not exists( world.caches .. "/" .. UNLOCALIZED .. "/pack" ), "the pack's folder is left" )
+	end },
+
 	{ "languages: localized packs, getManifest and the language calls", function()
 		local world = newWorld()
 		filePack( world, "base", "essential", { "a.txt" } )

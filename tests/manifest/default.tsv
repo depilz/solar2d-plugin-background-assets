@@ -57,6 +57,7 @@ emulator	status: store and local status bits, unknown ids
 emulator	checkForUpdates: removes local packs whose manifest is gone
 emulator	removeAssetPack: deletes a local pack's files and folders
 emulator	path calls: urlForPath, pathForFile, contentsAtPath and fileForPath through the front
+emulator	win32-sim path calls: urlForPath gives forward slashes only, and the path calls and removeAssetPack work
 emulator	languages: localized packs, getManifest and the language calls
 emulator	reset: empties the device; install-time packs come back at the next launch
 emulator	relaunch: the device and the removed-pack record persist
