@@ -7,7 +7,7 @@
 # The copy ($SOLAR2D_SIM_APP, default Solar2D 3733's, in SUITE_OUT/app) has its own bundle id and is re-signed ad hoc;
 # it runs with HOME and CFFIXED_USER_HOME at SUITE_OUT/home and an empty plugins dir SUITE_OUT/plugins, so the
 # Simulator itself fetches the mac-sim archive from SUITE_OUT/home/Solar2DPlugins. That dir is a symlink to
-# $BA_SIM_SOLAR2D_PLUGINS when set (an existing Solar2DPlugins dir, e.g. one funbox's install filled), else it holds a
+# $BA_SIM_SOLAR2D_PLUGINS when set (an existing Solar2DPlugins dir that holds the plugin), else it holds a
 # copy of the repo's plugin/com.studycat/plugin.backgroundAssets/. Nothing is written to the user's Simulator plugins
 # dir or ~/Solar2DPlugins (the copy's own preferences may land under ~/Library), and the suite fails if either changes
 # while it runs.

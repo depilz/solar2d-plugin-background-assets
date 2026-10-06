@@ -1,15 +1,15 @@
 Loading a pack's files
 ======================
 
-This page loads the images, sounds and other files of a local pack. The calls are the path calls of :doc:`api`, whose
-"Path calls" section has the details.
+This page shows how to load the images, sounds and other files of a local pack. It uses the path calls described in
+:doc:`api/path-calls`.
 
 Images and sounds
 -----------------
 
-``display.newImage`` and ``audio.loadSound`` fail on a pack file's absolute path, the path ``urlForPath`` gives;
-``io.open`` reads it. So the plugin adds ``pathForFile(path [, options])``, which returns ``filename, baseDirectory``
-for ``display.newImage`` and ``audio.loadSound``:
+``display.newImage`` and ``audio.loadSound`` fail on a pack file's absolute path (the path ``urlForPath`` gives),
+although ``io.open`` reads it. The plugin therefore adds ``pathForFile(path [, options])``, which returns
+``filename, baseDirectory`` values that both can load:
 
 .. code-block:: lua
 
@@ -23,11 +23,12 @@ for ``display.newImage`` and ``audio.loadSound``:
        audio.play(audio.loadSound(soundName, soundDirectory))
    end
 
-``baseDirectory`` is ``system.CachesDirectory``. On iOS the filename goes through a symbolic link the plugin keeps
-under it, so no file is copied. The filename stays valid across launches as long as the pack is local. The same code
-works in the Solar2D Simulator (see :doc:`simulator`).
+``baseDirectory`` is ``system.CachesDirectory``. On iOS, the filename resolves through a symbolic link that the
+plugin keeps in that directory, so no file is copied. The filename stays valid across launches as long as the pack is
+local. The same code works in the Solar2D Simulator (see :doc:`simulator`).
 
-The path is the file's path in the packs' shared file namespace, as the pack's manifest selects it (see :doc:`packs`).
+The path you pass is the file's path in the packs' shared file namespace, as the pack's manifest selects it (see
+:doc:`packs`).
 
 Other reads
 -----------
@@ -36,7 +37,7 @@ Other reads
 - ``contentsAtPath(path [, options])`` returns the file's contents as a Lua string;
 - ``fileForPath(path [, options])`` returns the file open for reading, as a Lua file. The app closes it.
 
-Each returns ``nil, err`` when it fails, with an error table (see "Errors" in :doc:`api`):
+On failure, each returns ``nil, err``, with an error table as the second value (see :doc:`api/errors`):
 
 .. code-block:: lua
 
@@ -48,8 +49,8 @@ Each returns ``nil, err`` when it fails, with an error table (see "Errors" in :d
 Checking the pack
 -----------------
 
-With ``options.assetPackId``, a path call also checks that the pack is local, and gives ``assetPackNotAvailable`` when
-it is not.
+With ``options.assetPackId``, a path call also checks that the pack is local, and fails with
+``assetPackNotAvailable`` when it is not.
 
-After ``removeAssetPack``, the path calls report the pack gone: ``assetPackNotAvailable`` with the pack's id in
-``options.assetPackId``, ``fileNotFound`` without it.
+After ``removeAssetPack``, the path calls report the pack as gone: ``assetPackNotAvailable`` when
+``options.assetPackId`` holds the pack's id, ``fileNotFound`` when it does not.

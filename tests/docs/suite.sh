@@ -2,7 +2,8 @@
 # run.sh: named-only
 # docs: builds docs/ with Sphinx under -W and fails on a non-zero exit or any WARNING in the output, and checks that
 # the reference pages have an entry for every public function and emulator option of lua/, every error name of the
-# front and every download phase the iOS backend sends.
+# front and every download phase the iOS backend sends. Each function of the library has its own page,
+# docs/api/<name>.rst, titled <name>().
 # sphinx-build is $SPHINX_BUILD when set, else one from a venv made in SUITE_OUT from docs/requirements.txt (that
 # needs python3 and network access to PyPI; there is no skip).
 set -euo pipefail
@@ -72,31 +73,43 @@ has_option_cells() {
   return $missing
 }
 
-# has_error_rows names...: prints each name with no ``name`` cell in api.rst's error table; no name at all fails
+# has_pages names...: prints each name with no page api/<name>.rst whose first line is <name>(); no name at all fails
+has_pages() {
+  local name missing=0
+  (($# > 0)) || { echo "no library functions to check"; return 1; }
+  for name in "$@"; do
+    [[ -f "$DOCS/api/$name.rst" && "$(head -n 1 "$DOCS/api/$name.rst")" == "$name()" ]] ||
+      { echo "missing page: api/$name.rst titled $name()"; missing=1; }
+  done
+  return $missing
+}
+# has_error_rows names...: prints each name with no ``name`` cell in api/errors.rst's table; no name at all fails
 has_error_rows() {
   local name missing=0
   (($# > 0)) || { echo "no error names to check"; return 1; }
   for name in "$@"; do
-    grep -q "^     - \`\`$name\`\`\$" "$DOCS/api.rst" || { echo "missing in api.rst errors: \`\`$name\`\`"; missing=1; }
+    grep -q "^     - \`\`$name\`\`\$" "$DOCS/api/errors.rst" ||
+      { echo "missing in api/errors.rst: \`\`$name\`\`"; missing=1; }
   done
   return $missing
 }
 
-# has_phases phases...: prints each phase missing from api.rst's ``phase`` line; no phase at all fails
+# has_phases phases...: prints each phase missing from api/events.rst's ``phase`` line; no phase at all fails
 has_phases() {
   local line phase missing=0
   (($# > 0)) || { echo "no download phases to check"; return 1; }
-  line=$(grep '^- ``phase``:' "$DOCS/api.rst") || { echo "no \`\`phase\`\` line in api.rst"; return 1; }
+  line=$(grep '^- ``phase``:' "$DOCS/api/events.rst") || { echo "no \`\`phase\`\` line in api/events.rst"; return 1; }
   for phase in "$@"; do
-    grep -qF "\`\`\"$phase\"\`\`" <<<"$line" || { echo "missing in api.rst phase line: \`\`\"$phase\"\`\`"; missing=1; }
+    grep -qF "\`\`\"$phase\"\`\`" <<<"$line" ||
+      { echo "missing in api/events.rst phase line: \`\`\"$phase\"\`\`"; missing=1; }
   done
   return $missing
 }
 
 coverage() {
   local missing=0
-  has_terms "$DOCS/api.rst" "" $(lua_functions 'lib\.' "$FRONT") || missing=1
-  has_terms "$DOCS/api.rst" "manifest:" $(lua_functions 'Manifest:' "$FRONT") || missing=1
+  has_pages $(lua_functions 'lib\.' "$FRONT") || missing=1
+  has_terms "$DOCS/api/manifest.rst" "manifest:" $(lua_functions 'Manifest:' "$FRONT") || missing=1
   has_terms "$DOCS/emulator.rst" "" $(lua_functions 'emulator\.' "$EMULATOR") || missing=1
   has_option_cells $(emulator_options) || missing=1
   has_error_rows $(error_names) || missing=1

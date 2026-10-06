@@ -32,7 +32,7 @@ The front finds its backend in one of two ways:
 What the front owns
 -------------------
 
-All the API's policy is in the front. A backend never repeats it:
+All of the API's policy lives in the front, and a backend never repeats it:
 
 - argument checks, and the Lua errors that report a wrong argument type;
 - the iOS version each call needs, from the backend's ``apiVersion``, and the ``unsupported`` error;
@@ -69,20 +69,20 @@ and 4 ``fileNotFound``.
 - ``done(result)`` on success;
 - ``done(nil, error)`` on failure, with a raw error.
 
-It calls it on the main thread, in the Corona main Lua state. It may call it before the backend function returns: the
-front then defers the listener with ``defer``. After its one call, the backend drops its reference to ``done``.
+The call happens on the main thread, in the Corona main Lua state, and may come before the backend function returns:
+the front then defers the listener with ``defer``. After that one call, the backend drops its reference to ``done``.
 
 **Synchronous functions** return their result, or ``nil, error`` with a raw error.
 
-**Packs given to the backend** are given by id. When Apple's method takes a ``BAAssetPack``, the backend resolves the
-object by id from the packs it last received. When it has none for that id, it fetches the pack first, through the
+**Packs given to the backend** are passed by id. When Apple's method takes a ``BAAssetPack``, the backend resolves the
+object by id from the packs it last received. If it has none for that id, it fetches the pack first, through the
 manifest on iOS 27.
 
 Every backend
 -------------
 
-These two functions are all a backend whose ``apiVersion`` is nil needs: they are the smallest backend this interface
-allows, over which the front reports every call as unsupported.
+A backend whose ``apiVersion`` is nil needs only these two functions. Together they are the smallest backend this
+interface allows; over it, the front reports every call as unsupported.
 
 ``info()``
     Returns ``{ platform, osVersion, apiVersion, hosting }``. The front calls it once, when it loads.
@@ -102,16 +102,16 @@ allows, over which the front reports every call as unsupported.
 The Background Assets calls
 ---------------------------
 
-A backend whose ``apiVersion`` reaches a call provides that call's functions. The minimum versions are the front's
-``MINIMUM`` table. Each function wraps the Apple method named beside it.
+A backend whose ``apiVersion`` reaches a call provides that call's functions. The minimum versions are those in the
+front's ``MINIMUM`` table. Each function wraps the Apple method named beside it.
 
 ``setDelegate(handler)``
     Sets the download delegate (``BAManagedAssetPackDownloadDelegate``). The front calls it once, when it loads on a
-    backend whose ``apiVersion`` reaches ``setDelegate``, whether or not the app sets a delegate, and never with
+    backend whose ``apiVersion`` reaches ``setDelegate``, whether or not the app sets a delegate. It never passes
     ``nil``: the front needs ``"finished"`` events for the removed-pack record. The app's ``setDelegate`` only changes
     where the front sends events and never reaches the backend. The backend holds its delegate object strongly, because
-    the manager holds its delegate weakly. For each delegate callback, it calls
-    ``handler(download)`` on the main thread with ``{ phase, assetPack, progress, error }``:
+    the manager holds its delegate weakly. For each delegate callback, it calls ``handler(download)`` on the main
+    thread with ``{ phase, assetPack, progress, error }``:
 
     - ``phase`` is ``"began"``, ``"paused"``, ``"progress"``, ``"finished"`` or ``"failed"``;
     - ``assetPack`` is a raw pack;
@@ -168,8 +168,8 @@ A backend whose ``apiVersion`` reaches a call provides that call's functions. Th
 Path primitives
 ---------------
 
-The front's path calls, ``urlForPath``, ``pathForFile``, ``contentsAtPath`` and ``fileForPath``, first make their
-checks. Then they call these functions. ``path`` is the path relative to the packs' shared file namespace, as the app
+The front's path calls (``urlForPath``, ``pathForFile``, ``contentsAtPath`` and ``fileForPath``) make their checks
+first, then call these functions. ``path`` is the path relative to the packs' shared file namespace, as the app
 gave it. ``language`` is nil, or a language identifier for Apple's iOS 27 ``asLocalizedForLanguage:`` variants.
 ``assetPackId`` is nil or a pack id. The front never passes both ``language`` and ``assetPackId``.
 
@@ -194,7 +194,7 @@ gave it. ``language`` is nil, or a language identifier for Apple's iOS 27 ``asLo
     ``audio.loadSound``. Returns ``filename, baseDirectory``, which ``pathForFile`` hands to the app unchanged.
 
     - On iOS, the backend keeps a symbolic link under ``system.CachesDirectory`` to a folder that holds the file, and
-      returns the filename through that link with ``system.CachesDirectory``. On iOS that base directory is
+      returns the filename through that link with ``system.CachesDirectory``. That base directory is
       ``Library/Caches/Caches``, so the link goes where it points. The backend picks the link layout: one link per pack
       folder, or one for the namespace root. It creates a link when needed, replaces it when its target changes, and
       recreates it when the OS has purged the caches. It never copies a pack file. The filename stays valid across
@@ -209,7 +209,7 @@ gave it. ``language`` is nil, or a language identifier for Apple's iOS 27 ``asLo
 The transient 513
 ~~~~~~~~~~~~~~~~~
 
-On iOS, ``URLForPath`` sometimes fails for a few milliseconds with ``NSCocoaErrorDomain`` 513 after a pack's state
+On iOS, ``URLForPath`` sometimes fails with ``NSCocoaErrorDomain`` 513 for a few milliseconds after a pack's state
 changes. Every native path lookup (``urlForPath``, ``contentsAtPath``, ``fileForPath``) handles it in the backend:
 
 1. If a ``removeAssetPack`` started by the plugin is still in flight, wait for its completion, up to 250 ms.
@@ -223,7 +223,8 @@ The removed-pack record
 -----------------------
 
 The record lists the pack ids this plugin removed that have not been made local again. Below iOS 26.4, where
-``assetPackIsAvailableLocallyWithIdentifier:`` does not exist, it decides the pack check. The front keeps the record:
+``assetPackIsAvailableLocallyWithIdentifier:`` does not exist, it decides the pack check. The front keeps it up to
+date:
 
 - a successful ``removeAssetPack`` adds the id;
 - a successful ``ensureLocalAvailability`` or a ``"finished"`` download clears it.
@@ -231,7 +232,7 @@ The record lists the pack ids this plugin removed that have not been made local 
 A download that finishes while the app is not running never reaches the front, so ``ensureLocalAvailability`` is the
 dependable way to clear the record.
 
-The backend only stores it, across launches, in plugin-owned storage under the app's own container:
+The backend only stores the record, across launches, in plugin-owned storage under the app's own container:
 
 ``loadRemovedAssetPacks()``
     Returns the stored ids as an array, or an empty array when nothing is stored. The front calls it once, the first

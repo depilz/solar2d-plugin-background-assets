@@ -1,0 +1,55 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 602" role="img" aria-label="How it works: 1, you upload your packs, built with ba-package, to App Store Connect or your own server. 2, people install your app. 3, iOS downloads the packs in the background, with the downloader extension. 4, your app uses the files with pathForFile. Your app can also ask for a pack on demand." font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif">
+<defs><marker id="ah" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#6f7f93"/></marker><marker id="al" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="#58a6ff"/></marker></defs>
+<rect x="12" y="12" width="360" height="118" rx="14" fill="#1f2733" stroke="#334154"/>
+<circle cx="60" cy="71.0" r="30" fill="#1d3354"/>
+<g transform="translate(43.2 54.2) scale(1.4)" fill="none" stroke="#58a6ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<path d="M12 15V4M7.5 8.5L12 4l4.5 4.5"/>
+<path d="M4 14v4.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V14"/>
+</g>
+<circle cx="34" cy="32" r="11" fill="#58a6ff"/>
+<text x="34" y="36.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">1</text>
+<text x="106" y="46" font-size="16" font-weight="700" fill="#e8eef5">You upload your packs</text>
+<text x="106" y="70" text-anchor="start" font-size="12.5" font-family="SFMono-Regular, Menlo, Consolas, monospace" fill="#58a6ff">ba-package</text>
+<text x="106" y="89" text-anchor="start" font-size="13" fill="#a9b6c5">to App Store Connect</text>
+<text x="106" y="108" text-anchor="start" font-size="13" fill="#a9b6c5">or your own server</text>
+<path d="M60 135V159" stroke="#6f7f93" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="12" y="164" width="360" height="118" rx="14" fill="#1f2733" stroke="#334154"/>
+<circle cx="60" cy="223.0" r="30" fill="#1d3354"/>
+<g transform="translate(43.2 206.2) scale(1.4)" fill="none" stroke="#58a6ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/>
+<path d="M10.5 18.5h3"/>
+</g>
+<circle cx="34" cy="184" r="11" fill="#58a6ff"/>
+<text x="34" y="188.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">2</text>
+<text x="106" y="198" font-size="16" font-weight="700" fill="#e8eef5">People install your app</text>
+<text x="106" y="222" text-anchor="start" font-size="13" fill="#a9b6c5">From the App Store</text>
+<text x="106" y="241" text-anchor="start" font-size="13" fill="#a9b6c5">or TestFlight</text>
+<path d="M60 287V311" stroke="#6f7f93" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="12" y="316" width="360" height="118" rx="14" fill="#1f2733" stroke="#334154"/>
+<circle cx="60" cy="375.0" r="30" fill="#1d3354"/>
+<g transform="translate(43.2 358.2) scale(1.4)" fill="none" stroke="#58a6ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<path d="M7 17.5H6a4 4 0 0 1-.6-7.95A6 6 0 0 1 17.2 8.1 4.5 4.5 0 0 1 18 17.5h-1"/>
+<path d="M12 11v9M8.8 16.8 12 20l3.2-3.2"/>
+</g>
+<circle cx="34" cy="336" r="11" fill="#58a6ff"/>
+<text x="34" y="340.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">3</text>
+<text x="106" y="350" font-size="16" font-weight="700" fill="#e8eef5">iOS downloads the packs</text>
+<text x="106" y="374" text-anchor="start" font-size="13" fill="#a9b6c5">In the background, with the</text>
+<text x="106" y="393" text-anchor="start" font-size="13" fill="#a9b6c5">downloader extension</text>
+<path d="M60 439V463" stroke="#6f7f93" stroke-width="2" fill="none" marker-end="url(#ah)"/>
+<rect x="12" y="468" width="360" height="118" rx="14" fill="#1f2733" stroke="#334154"/>
+<circle cx="60" cy="527.0" r="30" fill="#1d3354"/>
+<g transform="translate(43.2 510.2) scale(1.4)" fill="none" stroke="#58a6ff" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+<rect x="3" y="4.5" width="18" height="15" rx="2"/>
+<circle cx="8.5" cy="9.5" r="1.6"/>
+<path d="M21 15.5l-5-5-9 9"/>
+</g>
+<circle cx="34" cy="488" r="11" fill="#58a6ff"/>
+<text x="34" y="492.5" text-anchor="middle" font-size="12.5" font-weight="700" fill="#ffffff">4</text>
+<text x="106" y="502" font-size="16" font-weight="700" fill="#e8eef5">Your app uses the files</text>
+<text x="106" y="526" text-anchor="start" font-size="12.5" font-family="SFMono-Regular, Menlo, Consolas, monospace" fill="#58a6ff">pathForFile</text>
+<text x="106" y="545" text-anchor="start" font-size="12.5" font-family="SFMono-Regular, Menlo, Consolas, monospace" fill="#58a6ff">display.newImage</text>
+<text x="106" y="564" text-anchor="start" font-size="12.5" font-family="SFMono-Regular, Menlo, Consolas, monospace" fill="#58a6ff">audio.loadSound</text>
+<path d="M376 527.0H412V375.0H382" stroke="#58a6ff" stroke-width="2" stroke-dasharray="6 5" fill="none" marker-end="url(#al)"/>
+<text x="428" y="451.0" font-size="12.5" fill="#58a6ff" transform="rotate(-90 428 451.0)" text-anchor="middle">on demand</text>
+</svg>

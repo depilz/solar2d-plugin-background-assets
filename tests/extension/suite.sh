@@ -46,7 +46,7 @@ swift_flavours() {
 # demo_refused_before_out: refused at the installed-archive check (HOME has no Solar2DPlugins), an absent --out stays
 # absent
 demo_refused_before_out() {
-  exits 2 "is missing; install the plugin" env HOME="$SUITE_OUT/no-plugins" "$DEMO" --profile "$PROFILE" \
+  exits 2 "is missing; copy" env HOME="$SUITE_OUT/no-plugins" "$DEMO" --profile "$PROFILE" \
     --ext-profile "$PROFILE" --out "$SUITE_OUT/refused" &&
     [[ ! -e "$SUITE_OUT/refused" ]]
 }

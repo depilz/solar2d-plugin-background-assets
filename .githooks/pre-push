@@ -1,7 +1,7 @@
 #!/bin/bash
 # Runs the default test run before every push once tests/setup.sh has set core.hooksPath; a failure blocks the push and
-# keeps the run's output, whose path it prints. Deliberately no post-checkout hook: funbox runs `git checkout -f <rev>`
-# in plugin repos.
+# keeps the run's output, whose path it prints. Deliberately no post-checkout hook: tools that pin plugin repos may run
+# `git checkout -f <rev>` in them.
 set -uo pipefail
 
 root=$(git rev-parse --show-toplevel) || exit 1

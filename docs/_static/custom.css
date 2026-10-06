@@ -1,0 +1,20 @@
+/* Keep the plugin logo small in Furo's sidebar; Furo stretches it to the sidebar's width otherwise. */
+.sidebar-logo {
+  max-width: 64px;
+}
+
+/* The "How it works" diagram: a wide, left-to-right version and a narrow, top-to-bottom one. Furo's only-light and
+   only-dark classes pick the colour scheme; these pick the layout by screen width. The hiding selectors outrank Furo's
+   html body[data-theme] .only-* rules, which show the active scheme's images with !important. */
+img.flow-diagram {
+  margin: 1.5rem 0 0.5rem;
+}
+img.flow-narrow {
+  max-width: 440px;
+}
+@media (max-width: 46em) {
+  html body img.flow-diagram.flow-wide { display: none !important; }
+}
+@media (min-width: 46.01em) {
+  html body img.flow-diagram.flow-narrow { display: none !important; }
+}

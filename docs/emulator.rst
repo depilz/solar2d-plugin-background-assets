@@ -2,12 +2,12 @@ The Simulator emulator
 ======================
 
 In the Solar2D Simulator (``mac-sim`` and ``win32-sim``), ``plugin.backgroundAssets`` runs over a folder emulator of
-Background Assets, written in Lua. Its packs come from local folders described by the ``ba-package`` manifests Apple's
-``xcrun ba-package`` takes. Downloads take time and send download events, they can fail offline or for lack of disk
-space, and packs can be removed. The app configures the emulator through the module
-``plugin.backgroundAssets.emulator``. This page is its reference.
+Background Assets, written in Lua. Its packs come from local folders described by the ``ba-package`` manifests that
+Apple's ``xcrun ba-package`` takes. Downloads take time, send download events and can fail offline or for lack of disk
+space; packs can be removed. The app configures the emulator through the module ``plugin.backgroundAssets.emulator``,
+which this page documents.
 
-The emulator works under the API of :doc:`api` unchanged: the plugin's library table is the same as on iOS.
+The API of :doc:`api` works unchanged over the emulator: the plugin's library table is the same as on iOS.
 ``pathForFile`` gives a filename and ``system.CachesDirectory``, as on iOS, so an app's pack-loading code is the same
 in the Simulator and on a device.
 
@@ -15,8 +15,8 @@ Requiring the module
 --------------------
 
 The module exists only in the Simulator archives: on a device it cannot be required. Require it only in the
-Simulator, by ``system.getInfo("environment")``, since ``system.getInfo("platform")`` gives the skin's OS (``"ios"``
-by default):
+Simulator, detected with ``system.getInfo("environment")``, since ``system.getInfo("platform")`` gives the skin's OS
+(``"ios"`` by default):
 
 .. code-block:: lua
 
@@ -27,14 +27,14 @@ by default):
    local backgroundAssets = require("plugin.backgroundAssets")
 
 The module may be required before or after ``plugin.backgroundAssets``, but ``apiVersion`` and ``hosting`` must be set
-before the plugin's first ``require``. Its flat name, ``plugin_backgroundAssets_emulator``, reaches the same module.
+before the plugin's first ``require``. Its flat name, ``plugin_backgroundAssets_emulator``, loads the same module.
 
 The module has two functions.
 
 ``configure(options)``
     Merges the fields of ``options`` into the emulator's settings. Returns nothing. An unknown field, or a field of the
-    wrong type or value, raises a Lua error naming the field. Settings are not stored: the app calls ``configure`` on
-    every launch.
+    wrong type or value, raises a Lua error naming the field. Settings are not stored, so the app calls ``configure``
+    on every launch.
 
 ``reset()``
     Empties the emulated device (see `The emulated device`_). Returns nothing. Settings are kept.
@@ -89,15 +89,15 @@ Over the emulator, ``getCapabilities()`` gives:
 - ``platform``: ``"mac-sim"``, or ``"win32-sim"`` on Windows;
 - ``osVersion``: nil;
 - ``hosting``: the ``hosting`` setting. It changes nothing else in the emulator;
-- ``calls``: the calls the emulated ``apiVersion`` reaches. Emulating ``"26.0"`` or ``"26.4"``, the newer calls give
-  ``unsupported``, as on that iOS version.
+- ``calls``: the calls the emulated ``apiVersion`` reaches. When ``apiVersion`` is ``"26.0"`` or ``"26.4"``, the newer
+  calls give ``unsupported``, as on that iOS version.
 
 Pack sources
 ------------
 
 ``packsDirectory`` is a folder of ``ba-package`` manifests and the files they select: the same input ``xcrun
-ba-package`` takes. Every ``*.json`` file at its top level is a manifest, one pack each. Other files and the folders
-are not manifests. A manifest whose ``platforms`` leaves out ``"iOS"`` is skipped.
+ba-package`` takes. Every ``*.json`` file at its top level is a manifest, describing one pack. Other files and the
+folders are not manifests. A manifest whose ``platforms`` leaves out ``"iOS"`` is skipped.
 
 A manifest's fields:
 
@@ -106,11 +106,11 @@ A manifest's fields:
 - ``fileSelectors``: the pack's files, see below;
 - ``language``: makes the pack a localized pack of that language;
 - ``platforms``;
-- ``sourceRoot``: the folder the selectors are relative to, relative to the manifest's folder. Without it, the
+- ``sourceRoot``: the folder the selectors are relative to, itself relative to the manifest's folder. Without it, the
   selectors are relative to ``packsDirectory``, as when ``ba-package`` runs from that folder;
 - ``userInfo``: an object, which the pack gives as its JSON text.
 
-Every selector kind of Apple's manifest template is read:
+The emulator reads every selector kind of Apple's manifest template:
 
 .. list-table::
    :header-rows: 1
@@ -132,8 +132,8 @@ Every selector kind of Apple's manifest template is read:
      - no file: it leaves out the file at that path
 
 Paths in selectors are relative to the source root. A file's path in the pack is its path in the packs' shared file
-namespace, the path the path calls take. For a ``file`` selector it is the path Apple packs it at; for the other kinds
-it follows the comments of Apple's template, never checked against a packed pack.
+namespace, which is the path the path calls take. For a ``file`` selector, it is the path Apple packs the file at; for
+the other kinds, it follows the comments in Apple's template and has never been checked against a packed pack.
 
 A bad manifest is skipped, with one ``print`` line naming the file and the reason. A manifest is bad when it is not
 valid JSON, has no ``assetPackID``, repeats another manifest's ``assetPackID``, has a selector with an unknown key, or
@@ -149,22 +149,22 @@ A pack, as the calls give it:
 
 Every call that would reach the store on iOS reads the pack sources again: ``getAssetPack``, ``getAllAssetPacks``,
 ``getManifest``, ``getStatusOfAssetPack``, ``getStatusRelativeToAssetPack``, ``ensureLocalAvailability``,
-``ensureLocalAvailabilityOfAssetPacks`` and ``checkForUpdates``. So does the plugin's load. A change to the folder while
-the app runs shows at the next such call.
+``ensureLocalAvailabilityOfAssetPacks`` and ``checkForUpdates``. The plugin also reads them when it loads. A change to
+the folder while the app runs shows up at the next such call.
 
 The emulated device
 -------------------
 
-The emulator keeps its device under ``system.CachesDirectory``, in ``plugin.backgroundAssets/emulator/``. On a Mac that
-is in the project's Simulator sandbox, ``~/Library/Application Support/Corona Simulator/<project>-<hash>/Caches/``. It
-holds:
+The emulator keeps its device under ``system.CachesDirectory``, in ``plugin.backgroundAssets/emulator/``. On a Mac,
+that folder is in the project's Simulator sandbox,
+``~/Library/Application Support/Corona Simulator/<project>-<hash>/Caches/``. It holds:
 
 - ``files/Unlocalized/<path>``: the files of the local packs that have no language;
 - ``files/<language>/<path>``: the files of the local localized packs;
 - ``state.json``: the local packs and their files, whether the device was installed (see `Downloads`_), the resolved
-  language, and the plugin's record of the packs it removed (see "Path calls" in :doc:`api`).
+  language, and the plugin's record of the packs it removed (see :doc:`api/path-calls`).
 
-The device lasts across Simulator relaunches, as a device keeps its packs.
+The device persists across Simulator relaunches, as a real device keeps its packs.
 
 ``reset()`` first ends every download in flight: each sends a ``failed`` download event, and each call waiting on it
 gets the error ``{ domain = "NSCocoaErrorDomain", code = 3072, message = "The operation was cancelled." }``. Then it
@@ -176,7 +176,7 @@ Downloads
 **Install-time packs.** When the plugin loads on a device not yet installed, the ``essential`` packs are copied in at
 once, with no download event, and the device is marked installed. At every load, each ``prefetch`` pack that is not
 local, and that the app has not removed, starts downloading, so an interrupted prefetch completes. Of the localized
-packs, only those of the stored resolved language are installed; none while it is nil.
+packs, only those in the stored resolved language are installed, and none while it is nil.
 
 **ensureLocalAvailability.** A pack that is not in the pack sources gives ``assetPackNotFound``. A local pack succeeds
 at once. A pack already downloading joins that download, and the call ends when it ends. Otherwise a download starts.
@@ -187,11 +187,11 @@ otherwise its error is the first failure's, and the event carries ``successes`` 
 
 **A download** lasts ``downloadDuration`` seconds, or else ``downloadSize / bytesPerSecond``. The ``setDelegate``
 listener gets ``began``, then ``progress`` about every 100 ms, whose ``totalUnitCount`` is the pack's ``downloadSize``.
-At the end, the files are copied into a staging folder and moved into place; then come ``finished``, and the call's
+At the end, the files are copied into a staging folder and moved into place; then come ``finished`` and the call's
 event. The timing uses ``timer.performWithDelay``, so downloads run only while the Simulator runs the app.
 
-A download that cannot start, offline or for lack of space, sends no ``began``: it sends ``failed`` with the error, and
-the call's event carries the same error.
+A download that cannot start (offline, or for lack of space) sends no ``began``. It sends ``failed`` with the error,
+and the call's event carries the same error.
 
 Failures
 --------
@@ -212,18 +212,19 @@ fail with the offline error. Setting ``offline = true`` fails every download in 
 local calls keep working: ``assetPackIsAvailableLocally``, ``getLocalStatusOfAssetPack``, the path calls,
 ``removeAssetPack``, the language calls, and ``ensureLocalAvailability`` of a local pack.
 
-**Low disk space.** With ``freeDiskSpace`` set, it is the device's free space. A download that needs more fails when
-it would start. Lowering it below what a download in flight still needs fails that download at its next progress step.
-A finished download takes its size from it, and a removed pack gives its size back. The ``essential`` packs installed
-at the first launch do not take their size from it: as on iOS, where they arrive with the app, ``freeDiskSpace`` is the
-free space with them already on the device, so removing one gives its size back too. ``reset()`` leaves it as it is.
+**Low disk space.** When set, ``freeDiskSpace`` is the device's free space. A download that needs more space fails
+when it would start. Lowering ``freeDiskSpace`` below what a download in flight still needs fails that download at its
+next progress step. A finished download takes its size from the free space, and a removed pack gives its size back. The
+``essential`` packs installed at the first launch do not take their size from it: as on iOS, where they arrive with the
+app, ``freeDiskSpace`` is the free space with them already on the device, so removing one gives its size back too.
+``reset()`` leaves ``freeDiskSpace`` as it is.
 
 Every failed download carries the pack's id in ``assetPackId``, sends ``failed`` to the ``setDelegate`` listener,
 and leaves no partial files.
 
-The two default codes are Foundation's standard ones. That iOS reports these failures with them has never been seen on
-a device: code that maps the plugin's errors to "offline" or "low disk space" must not rely on them without checking on
-a device.
+The two default codes are Foundation's standard ones. iOS has never been seen reporting these failures with them on a
+device, so code that maps the plugin's errors to "offline" or "low disk space" must not rely on them without checking
+on a device.
 
 Status, removal and updates
 ---------------------------
@@ -241,8 +242,8 @@ downloads, and nothing else. For all three, an id that is neither in the pack so
 ``assetPackNotFound``.
 
 ``removeAssetPack`` first ends the pack's download in flight, as ``reset()`` does. Then it deletes the pack's files,
-with the folders it leaves empty, and succeeds; for a known pack that is not local it succeeds too. An id that is
-neither in the pack sources nor local gives ``assetPackNotFound``.
+along with the folders this leaves empty, and succeeds. For a known pack that is not local, it succeeds too. An id
+that is neither in the pack sources nor local gives ``assetPackNotFound``.
 
 ``checkForUpdates`` gives no ``updatingIdentifiers``. Its ``removedIdentifiers`` are the local packs whose manifest is
 gone from the pack sources; their files are deleted.
@@ -287,9 +288,9 @@ Limits
 - No ``paused`` download event is ever sent.
 - Every pack is at version 1: ``requireLatestVersion`` and ``requireLatestVersions`` change nothing,
   ``updateAvailable`` and ``outOfDate`` are never set, and ``checkForUpdates`` never gives an updating pack.
-- The plugin loads its record of removed packs once per launch, so after ``reset()`` it keeps it until the next
-  launch: emulating iOS 26.0, where that record decides the pack check, a path call with the ``assetPackId`` of a
-  pack it removed still gives ``assetPackNotAvailable`` until then.
+- The plugin loads its record of removed packs once per launch, so after ``reset()`` it keeps that record until the
+  next launch. When emulating iOS 26.0, where that record decides the pack check, a path call with the
+  ``assetPackId`` of a pack it removed still gives ``assetPackNotAvailable`` until then.
 - ``primaryLanguage`` is always nil.
 - The default offline and low-disk-space codes are assumed, never seen on a device (see `Failures`_).
 - Also assumed, never seen on a device: that iOS gives a self-hosted pack's ``userInfo`` as JSON text, how a path

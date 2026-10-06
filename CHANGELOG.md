@@ -1,5 +1,17 @@
 # Changelog
 
+## Unreleased
+
+- **Docs refresh.** The docs move to the Furo theme, with a logo, copy buttons on code blocks, cards on the home page,
+  a "How it works" diagram and link previews. The Lua API reference has a page per call, each with its syntax,
+  parameters, result and an example, and separate pages for the tables, events, errors and the path calls' shared
+  rules. A new Troubleshooting page lists common failures with their fix, and the key gotchas are callouts. The
+  quickstart installs from the Solar2D Free Plugin Directory first. The docs suite now checks that every public
+  function has its own page.
+- **No internal tooling names in the public tree.** The demo's build script, its comments and the test comments no
+  longer refer to Studycat's internal tools; `tools/demo/ios-build.sh` says which folder to copy when the installed
+  plugin is missing or out of date.
+
 ## 1.0.0 — 2026-10-05
 
 - **User docs for Read the Docs.** `docs/` now holds a user guide around the reference pages: a quickstart, the app

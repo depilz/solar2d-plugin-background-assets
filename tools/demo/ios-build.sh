@@ -9,8 +9,8 @@
 # <dir>/project/Extensions/ and CoronaBuilder builds the copy: a Development profile gives <dir>/build/BADemo.app, an
 # App Store one <dir>/build/BADemo.ipa. Writes <dir>/descriptor.lua and <dir>/build.log, then prints the owner's next
 # command (install and launch, or upload). The plugin comes from ~/Solar2DPlugins, whose
-# com.studycat/plugin.backgroundAssets/iphone/data.tgz must equal the repo's committed iphone archive (funbox's install
-# puts it there).
+# com.studycat/plugin.backgroundAssets/iphone/data.tgz must equal the repo's committed iphone archive (copy the repo's
+# plugin/com.studycat/plugin.backgroundAssets/ there, as in the quickstart's Local copy).
 # Toolchains, overridable by env: DEVELOPER_DIR (Xcode 27.0), CORONA (/Applications/Corona-3733).
 # Exit 0 = BADemo built with the plugin and the extension, 1 = the build failed, 2 = usage or precondition error (<dir>
 # left as it was found).
@@ -79,9 +79,10 @@ OUT=$(physical "$OUT")
 
 INSTALLED=$HOME/Solar2DPlugins/com.studycat/plugin.backgroundAssets/iphone/data.tgz
 COMMITTED=$REPO/plugin/com.studycat/plugin.backgroundAssets/iphone/data.tgz
-[[ -f "$INSTALLED" ]] || die "$INSTALLED is missing; install the plugin with funbox (fun plugins install)"
+INSTALL_HINT="copy $REPO/plugin/com.studycat/plugin.backgroundAssets/ into ~/Solar2DPlugins/com.studycat/"
+[[ -f "$INSTALLED" ]] || die "$INSTALLED is missing; $INSTALL_HINT"
 cmp -s "$INSTALLED" "$COMMITTED" ||
-  die "$INSTALLED differs from the repo's $COMMITTED; install the plugin with funbox (fun plugins install)"
+  die "$INSTALLED differs from the repo's $COMMITTED; $INSTALL_HINT"
 
 export DEVELOPER_DIR=${DEVELOPER_DIR:-/Applications/Xcode.app/Contents/Developer}
 CORONA=${CORONA:-/Applications/Corona-3733}

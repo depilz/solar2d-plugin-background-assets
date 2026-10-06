@@ -1,25 +1,26 @@
 Running in the Simulator
 ========================
 
-This page runs an app that uses the plugin in the Solar2D Simulator, over the same pack sources you build your packs
-from. The emulator's every option and behaviour are in :doc:`emulator`.
+This page shows how to run an app that uses the plugin in the Solar2D Simulator, over the same sources you build your
+packs from. :doc:`emulator` documents every option and behaviour of the emulator.
 
 The emulator
 ------------
 
 In the Solar2D Simulator (``mac-sim`` and ``win32-sim``), the plugin runs over a folder emulator of Background Assets,
-with no opt-in: ``require("plugin.backgroundAssets")`` gives the same library table as on iOS, and the app's code is
-the same. Downloads take time and send download events, and the emulator keeps its packs across Simulator relaunches,
-as a device does.
+with no opt-in. ``require("plugin.backgroundAssets")`` returns the same library table as on iOS, so the app's code
+stays the same. Downloads take time and send download events, and the emulator keeps its packs across Simulator
+relaunches, just as a device does.
 
 The Xcode iOS Simulator is not supported: the plugin ships no archive for it.
 
 Configuring it
 --------------
 
-The emulator is configured through the module ``plugin.backgroundAssets.emulator``, which exists only in the Simulator.
-Require it only when ``system.getInfo("environment")`` is ``"simulator"``, and point ``packsDirectory`` at the folder of
-``ba-package`` manifests you build your packs from (see :doc:`packs`), so one set of sources feeds both:
+You configure the emulator through the ``plugin.backgroundAssets.emulator`` module, which exists only in the
+Simulator. Require it only when ``system.getInfo("environment")`` is ``"simulator"``. Point ``packsDirectory`` at the
+folder of ``ba-package`` manifests you build your packs from (see :doc:`packs`), so that the emulator and your built
+packs share one set of sources:
 
 .. code-block:: lua
 
@@ -31,14 +32,14 @@ Require it only when ``system.getInfo("environment")`` is ``"simulator"``, and p
 
 ``packsDirectory`` is an absolute path or a path relative to the project folder. Without it, no pack exists.
 
-``apiVersion``, the iOS version emulated (``"27.0"`` by default), and ``hosting`` (``"apple"`` by default) must be set
-before the first ``require("plugin.backgroundAssets")``. Settings are not stored: configure the emulator on every
+Set ``apiVersion``, the emulated iOS version (``"27.0"`` by default), and ``hosting`` (``"apple"`` by default) before
+the first ``require("plugin.backgroundAssets")``. The settings are not stored, so configure the emulator on every
 launch.
 
 Simulating the network and the disk
 -----------------------------------
 
-Each of these takes effect as :doc:`emulator` says:
+:doc:`emulator` describes the effect of each of these settings:
 
 .. code-block:: lua
 
@@ -51,21 +52,21 @@ Each of these takes effect as :doc:`emulator` says:
    end
 
 Going offline fails the downloads in flight, and lowering ``freeDiskSpace`` fails those that still need more than the
-new value. A finished download takes its size from ``freeDiskSpace``, and a removed pack gives its size back. The
-``essential`` packs installed at the first launch do not take their size from it: as on iOS, where they arrive with the
-app, ``freeDiskSpace`` is the free space with them already on the device, so removing one gives its size back too. The
-default errors of these failures are in :doc:`emulator` ("Failures").
+new value. A finished download subtracts its size from ``freeDiskSpace``, and removing a pack adds its size back. The
+``essential`` packs installed at the first launch do not subtract their size: as on iOS, where they arrive with the app,
+``freeDiskSpace`` is the free space with them already on the device. Removing one therefore adds its size back too.
+:doc:`emulator` lists the default errors of these failures ("Failures").
 
 A fresh install
 ---------------
 
-``emulator.reset()`` empties the emulated device: downloads in flight fail, and the packs and files go. At the next
-launch the ``essential`` packs arrive and the ``prefetch`` packs start downloading, as after a fresh install. The
-settings are kept.
+``emulator.reset()`` empties the emulated device: downloads in flight fail, and the packs and files are removed. At
+the next launch, the ``essential`` packs arrive and the ``prefetch`` packs start downloading, as after a fresh
+install. The settings are kept.
 
 What differs from a device
 --------------------------
 
-The emulator never sends a ``paused`` download event, keeps every pack at version 1, and assumes some behaviours it
-has never seen on a device. The full list is :doc:`emulator`, "Limits". Test on a device before you rely on an error
-code.
+The emulator never sends a ``paused`` download event, keeps every pack at version 1, and assumes some behaviours that
+have never been observed on a device. The full list is in the "Limits" section of :doc:`emulator`. Test on a device
+before you rely on an error code.

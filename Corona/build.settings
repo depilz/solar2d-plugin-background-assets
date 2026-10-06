@@ -1,5 +1,5 @@
 --
--- The demo declares the plugin; Solar2D takes it from ~/Solar2DPlugins (funbox's install puts it there).
+-- The demo declares the plugin; Solar2D takes it from ~/Solar2DPlugins (see the quickstart's Local copy).
 -- No CFBundleIdentifier: CoronaBuilder takes the bundle id from the provisioning profile.
 -- Background Assets with Apple hosting: Studycat's app group and team (the TestFlight demo under
 -- net.studycat.funlanguages); use your own. Without the team identifier, app-requested downloads never start.
